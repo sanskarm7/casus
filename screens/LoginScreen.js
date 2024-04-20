@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, ScrollView, Alert } from 'react-native';
 import HomeScreen from './HomeScreen';
 import { initializeApp } from '@firebase/app';
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from '@firebase/auth';
@@ -96,10 +96,13 @@ export default App = () => {
         }
       }
     } catch (error) {
-      console.error('Authentication error:', error.message);
-    }
+      if (error.message === 'Firebase: Password should be at least 6 characters (auth/weak-password).') {
+        Alert.alert('Error', 'Invalid password. Password should be at least 6 characters.');
+      } else {
+        Alert.alert('Error', error.message);
+      }
   };
-
+  }
   return (
     <ScrollView contentContainerStyle={styles.container}>
       {user ? (
